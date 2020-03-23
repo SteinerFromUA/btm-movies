@@ -1,0 +1,41 @@
+<?xml version="1.0" encoding="utf-8"?>
+<navigation xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/nav_entrance"
+    app:startDestination="@id/dest_sign_in">
+
+    <fragment
+        android:id="@+id/dest_sign_in"
+        android:name="com.steiner.btmmovies.app.ui.entrance.signin.SignInFragment"
+        android:label="@string/toolbar_sign_in"
+        tools:layout="@layout/fragment_sign_in">
+
+        <action
+            android:id="@+id/action_sign_in_to_entrance_help"
+            app:destination="@id/dest_entrance_help"
+            app:enterAnim="@anim/slide_in_right"
+            app:exitAnim="@anim/slide_out_left"
+            app:popEnterAnim="@anim/slide_in_left"
+            app:popExitAnim="@anim/slide_out_right" />
+        <action
+            android:id="@+id/action_sign_in_to_activity_main"
+            app:destination="@id/dest_activity_main"
+            app:enterAnim="@anim/slide_in_right"
+            app:exitAnim="@anim/slide_out_left"
+            app:popEnterAnim="@anim/slide_in_left"
+            app:popExitAnim="@anim/slide_out_right" />
+    </fragment>
+
+    <fragment
+        android:id="@+id/dest_entrance_help"
+        android:name="com.steiner.btmmovies.app.ui.entrance.help.EntranceHelpFragment"
+        android:label="@string/toolbar_entrance_help"
+        tools:layout="@layout/fragment_placeholder" />
+
+    <activity
+        android:id="@+id/dest_activity_main"
+        android:name="com.steiner.btmmovies.app.ui.main.MainActivity"
+        android:label="MainActivity"
+        tools:layout="@layout/activity_main" />
+</navigation>

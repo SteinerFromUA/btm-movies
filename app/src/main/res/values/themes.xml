@@ -1,0 +1,74 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources xmlns:tools="http://schemas.android.com/tools">
+
+    <style name="Theme.BtsMovies.Regular" parent="Theme.BtsMovies.DayNight">
+        <item name="android:statusBarColor">@color/regular_status_bar_scrim</item>
+        <item name="android:windowLightStatusBar" tools:targetApi="m">
+            @bool/use_light_status_regular
+        </item>
+    </style>
+
+    <!--Top level DayNight theme to be used in AndroidManifest.xml-->
+    <style name="Theme.BtsMovies.DayNight" parent="Base.Theme.BtsMovies" />
+
+    <!--Base custom theme which will be shared between both light and dark theme variants-->
+    <style name="Base.Theme.BtsMovies" parent="Base.BtsMoviesThemeBuilder">
+        <!--Material color attributes -->
+        <item name="colorPrimary">@color/color_primary</item>
+        <item name="colorPrimaryVariant">@color/color_primary_variant</item>
+        <item name="colorSecondary">@color/color_secondary</item>
+        <item name="colorSecondaryVariant">@color/color_secondary_variant</item>
+
+        <item name="android:colorBackground">@color/color_background</item>
+        <item name="colorSurface">@color/color_surface</item>
+        <item name="colorError">@color/color_error</item>
+
+        <item name="colorOnPrimary">@color/color_on_primary</item>
+        <item name="colorOnSecondary">@color/color_on_secondary</item>
+        <item name="colorOnBackground">@color/color_on_background</item>
+        <item name="colorOnSurface">@color/color_on_surface</item>
+        <item name="colorOnError">@color/color_on_error</item>
+
+        <!-- Material Widget styles -->
+        <item name="toolbarStyle">@style/Widget.MaterialComponents.Toolbar.Primary</item>
+        <item name="tabStyle">@style/Widget.BtmMovies.TabLayout</item>
+        <item name="materialCardViewStyle">@style/Widget.BtmMovies.CardView</item>
+
+        <!-- Other Colors -->
+        <item name="android:windowBackground">@color/color_background</item>
+
+        <!--  -->
+        <item name="homeAsUpIndicator">@drawable/ic_arrow_back_white_24dp</item>
+    </style>
+
+    <style name="Base.BtsMoviesThemeBuilder" parent="Theme.MaterialComponents.DayNight.NoActionBar">
+        <item name="android:statusBarColor">@color/status_bar_scrim</item>
+        <item name="android:windowLightStatusBar" tools:targetApi="m">
+            @bool/use_light_status
+        </item>
+        <item name="android:navigationBarColor">@color/nav_bar_scrim</item>
+        <item name="android:windowLightNavigationBar" tools:targetApi="o_mr1">
+            @bool/use_light_navigation
+        </item>
+        <item name="android:navigationBarDividerColor" tools:targetApi="o_mr1">
+            ?colorControlHighlight
+        </item>
+
+        <item name="android:windowDrawsSystemBarBackgrounds">true</item>
+
+        <!--Remap legacy AppCompat attributes to MaterialComponent attributes-->
+        <item name="colorPrimaryDark">?colorPrimaryVariant</item>
+        <item name="colorAccent">?colorSecondary</item>
+    </style>
+
+    <style name="Theme.BtsMovies.Transparent" parent="@style/Theme.MaterialComponents.NoActionBar">
+        <item name="windowActionBar">false</item>
+        <item name="windowNoTitle">true</item>
+        <item name="android:windowBackground">@color/transparent</item>
+        <item name="android:windowNoTitle">true</item>
+        <item name="android:windowIsFloating">true</item>
+        <item name="android:windowIsTranslucent">true</item>
+        <item name="android:windowContentOverlay">@null</item>
+        <item name="android:backgroundDimEnabled">false</item>
+    </style>
+</resources>

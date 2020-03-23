@@ -1,0 +1,43 @@
+<?xml version="1.0" encoding="utf-8"?>
+<navigation xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/nav_main"
+    app:startDestination="@id/dest_home">
+
+    <fragment
+        android:id="@+id/dest_home"
+        android:name="com.steiner.btmmovies.app.ui.main.home.HomeFragment"
+        android:label="HomeFragment"
+        tools:layout="@layout/fragment_home">
+
+        <action
+            android:id="@+id/action_home_to_movie_details"
+            app:destination="@id/dest_movie_details"
+            app:enterAnim="@anim/slide_in_right"
+            app:exitAnim="@anim/slide_out_left"
+            app:popEnterAnim="@anim/slide_in_left"
+            app:popExitAnim="@anim/slide_out_right" />
+        <action
+            android:id="@+id/action_home_to_activity_entrance"
+            app:destination="@id/dest_activity_entrance"
+            app:enterAnim="@anim/slide_in_right"
+            app:exitAnim="@anim/slide_out_left"
+            app:popEnterAnim="@anim/slide_in_left"
+            app:popExitAnim="@anim/slide_out_right" />
+    </fragment>
+
+    <fragment android:id="@+id/dest_movie_details"
+        android:label="MovieDetailsFragment"
+        tools:layout="@layout/fragment_placeholder"
+        android:name="com.steiner.btmmovies.app.ui.main.home.details.MovieDetailsFragment">
+        <argument
+            android:name="movie_id"
+            app:argType="integer" />
+    </fragment>
+
+    <activity
+        android:id="@+id/dest_activity_entrance"
+        android:name="com.steiner.btmmovies.app.ui.entrance.EntranceActivity"
+        android:label="EntranceActivity" />
+</navigation>

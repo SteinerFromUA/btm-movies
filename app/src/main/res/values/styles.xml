@@ -1,0 +1,13 @@
+<resources xmlns:tools="http://schemas.android.com/tools">
+
+    <!--TabLayout-->
+    <style name="Widget.BtmMovies.TabLayout" parent="Widget.MaterialComponents.TabLayout.Colored">
+        <item name="tabIndicatorColor">?attr/colorOnPrimary</item>
+    </style>
+
+    <!-- CardView -->
+    <style name="Widget.BtmMovies.CardView" parent="Widget.MaterialComponents.CardView">
+        <item name="cardElevation">4dp</item>
+        <item name="shapeAppearance">@style/ShapeAppearanceOverlay.BtmMovies.MaterialCardView</item>
+    </style>
+</resources>

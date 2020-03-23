@@ -1,0 +1,34 @@
+<resources>
+    <string name="app_name">BTM Movies</string>
+    <string name="text_internal_error">Internal application error :(</string>
+    <string name="text_sign_in_error">Sign in error :(</string>
+    <string name="facebook_app_id">214779359739723</string>
+    <string name="fb_login_protocol_scheme">fb214779359739723</string>
+
+    <string name="error_data_loading_title">Data loading failed!</string>
+    <string name="error_data_loading_body">Unknown error</string>
+    <string name="format_error_data_loading_body">Reason: %1$s</string>
+
+    <string name="state_refreshing">Refreshing…</string>
+    <string name="title_refreshed">Refreshed</string>
+    <string name="title_not_refreshed">Not refreshed</string>
+
+    <string name="text_btn_app_info">App info and help</string>
+    <string name="toolbar_sign_in">Go to movies!</string>
+    <string name="toolbar_entrance_help">BTM Movies info and help</string>
+
+    <string name="text_toolbar_home">Movies home</string>
+    <string name="format_toolbar_sub_home">Welcome, %1$s</string>
+    <string name="tab_films_ongoing">Ongoing</string>
+    <string name="tab_films_favourites">Favourites</string>
+    <string name="label_profile">Profile</string>
+    <string name="btn_share">Share</string>
+
+    <string name="text_no_ongoing_films_title">No ongoing films!</string>
+    <string name="text_no_ongoing_films_body">Sorry :(</string>
+    <string name="btn_add_to_favourites">Add to favourites</string>
+
+    <string name="text_no_favourite_films_title">No favourite films!</string>
+    <string name="text_no_favourite_films_body">Sorry :(</string>
+    <string name="btn_remove_from_favourites">Remove</string>
+</resources>

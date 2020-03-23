@@ -1,0 +1,134 @@
+buildscript {
+    apply from: "buildsystem/configurations.gradle"
+    apply from: "buildsystem/dependencies.gradle"
+
+    repositories {
+        google()
+        gradlePluginPortal()
+        maven { url "https://kotlin.bintray.com/kotlinx" }
+        maven { url 'https://dl.bintray.com/kotlin/kotlin-eap' }
+        maven { url "https://jitpack.io" }
+    }
+
+    dependencies {
+        classpath "org.jetbrains.kotlin:kotlin-gradle-plugin:${versions.root.kotlin}"
+        classpath "com.android.tools.build:gradle:${versions.root.androidPlugin}"
+        classpath "androidx.navigation:navigation-safe-args-gradle-plugin:${depsVersions.libs.androidX.navigation}"
+        classpath "com.github.ben-manes:gradle-versions-plugin:${versions.root.versionsPlugin}"
+        classpath "com.diffplug.spotless:spotless-plugin-gradle:${versions.root.spotlessPlugin}"
+        classpath "com.google.firebase:firebase-crashlytics-gradle:${versions.root.firebaseCrashlyticsPlugin}"
+    }
+}
+
+apply plugin: "com.github.ben-manes.versions"
+apply plugin: "com.diffplug.gradle.spotless"
+
+allprojects {
+
+    repositories {
+        google()
+        jcenter()
+        maven { url 'https://maven.fabric.io/public' }
+        maven { url "https://kotlin.bintray.com/kotlinx" }
+        maven { url 'https://dl.bintray.com/kotlin/kotlin-eap' }
+        maven { url "https://jitpack.io" }
+    }
+
+    tasks.withType(JavaCompile).configureEach { task ->
+        task.sourceCompatibility = JavaVersion.VERSION_1_8
+        task.targetCompatibility = JavaVersion.VERSION_1_8
+    }
+
+    tasks.withType(org.jetbrains.kotlin.gradle.dsl.KotlinJvmCompile).configureEach { task ->
+        task.kotlinOptions {
+            jvmTarget = JavaVersion.VERSION_1_8.toString()
+        }
+    }
+
+    plugins.withType(com.android.build.gradle.BasePlugin).configureEach { plugin ->
+        plugin.extension.compileOptions {
+            sourceCompatibility = JavaVersion.VERSION_1_8
+            targetCompatibility = JavaVersion.VERSION_1_8
+        }
+    }
+
+    tasks.withType(org.jetbrains.kotlin.gradle.dsl.KotlinCompile).configureEach { task ->
+        task.kotlinOptions {
+            suppressWarnings = true // Temporary disable warning in compilation output
+            freeCompilerArgs += [
+                    "-Xjvm-default=enable",
+                    "-Xallow-result-return-type",
+                    "-XXLanguage:+InlineClasses",
+                    '-Xopt-in=kotlin.RequiresOptIn',
+                    "-Xopt-in=kotlin.Experimental",
+                    "-Xopt-in=kotlin.ExperimentalStdlibApi",
+                    "-Xopt-in=kotlin.time.ExperimentalTime",
+                    "-Xopt-in=kotlinx.coroutines.ObsoleteCoroutinesApi",
+                    "-Xopt-in=kotlinx.coroutines.ExperimentalCoroutinesApi",
+                    "-Xopt-in=kotlinx.coroutines.FlowPreview",
+                    // "-XXLanguage:+NewInference",
+                    // "-progressive"
+            ]
+        }
+    }
+
+    configurations.all {
+        resolutionStrategy {
+            eachDependency { DependencyResolveDetails details ->
+                if (details.requested.group == 'org.jetbrains.kotlin') {
+                    if (details.requested.name == "kotlin-stdlib-jre") {
+                        details.useTarget deps.kotlin.stdlib.jdk
+                    } else if (details.requested.name == "kotlin-stdlib-jre7") {
+                        details.useTarget deps.kotlin.stdlib.jdk7
+                    } else if (details.requested.name == "kotlin-stdlib-jre8") {
+                        details.useTarget deps.kotlin.stdlib.jdk8
+                    }
+                    if (details.requested.name.startsWith('kotlin-stdlib')) {
+                        details.useVersion depsVersions.libs.kotlin.stdlib
+                    } else if (details.requested.name.startsWith('kotlin-reflect')) {
+                        details.useVersion depsVersions.libs.kotlin.reflect
+                    }
+                } else if (details.requested.group == 'org.jetbrains.kotlinx'
+                        && details.requested.name.startsWith('kotlinx-coroutines')) {
+                    details.useVersion depsVersions.libs.kotlin.coroutines
+                } else if (details.requested.group.startsWith("androidx")) {
+                    // Force all of the primary Androidx libraries to use the same version
+                } else if (details.requested.group == "com.squareup.okhttp3") {
+                    details.useVersion depsVersions.libs.okhttp
+                } else if (details.requested.group == "com.google.code.gson") {
+                    details.useVersion depsVersions.libs.gson
+                }
+            }
+        }
+
+        exclude group: 'androidx.legacy', module: 'legacy-support-core-ui'
+        exclude group: 'com.github.tinder', module: 'statemachine'
+    }
+}
+
+subprojects {
+    apply plugin: 'com.diffplug.gradle.spotless'
+
+    spotless {
+        kotlin {
+            target "**/*.kt"
+            ktlint(versions.root.ktLintPlugin)
+            //licenseHeaderFile project.rootProject.file('buildsystem/copyright.kt')
+        }
+    }
+}
+
+wrapper {
+    gradleVersion = "${versions.root.gradleDist}"
+    distributionUrl = "https://services.gradle.org/distributions/gradle-${gradleVersion}-all.zip"
+}
+
+Properties localProperties = new Properties()
+localProperties.load(project.rootProject.file('local.properties').newDataInputStream())
+localProperties.each { key, value ->
+    project.ext.set(key, value)
+}
+
+Object propOrDef(String propertyName, Object defaultValue) {
+    return project.hasProperty(propertyName) ? project.getProperty(propertyName) : defaultValue
+}

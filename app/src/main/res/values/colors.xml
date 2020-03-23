@@ -1,0 +1,48 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <color name="transparent">@android:color/transparent</color>
+    <color name="water_blue">#1895d6</color>
+    <color name="nice_blue">#0b7eba</color>
+    <color name="orange_red">#ff5722</color>
+    <color name="orange_red_two">#ff3b30</color>
+    <color name="white_two">#f5f5f5</color>
+    <color name="white">#ffffff</color>
+    <color name="reddish_pink">#ff2851</color>
+    <color name="black">#000000</color>
+    <color name="ice_blue">#f3faff</color>
+    <color name="silver">#c8c7cc</color>
+    <color name="light_mustard">#f9c15c</color>
+    <color name="light_tan">#fbe6a8</color>
+
+    <color name="color_primary">@color/water_blue</color>
+    <color name="color_primary_variant">@color/nice_blue</color>
+    <color name="color_secondary">@color/orange_red</color>
+    <color name="color_secondary_variant">@color/orange_red_two</color>
+    <color name="color_background">@color/white_two</color>
+    <color name="color_surface">@color/white</color>
+    <color name="color_error">@color/reddish_pink</color>
+    <color name="color_on_primary">@color/white</color>
+    <color name="color_on_secondary">@color/white</color>
+    <color name="color_on_background">@color/black</color>
+    <color name="color_on_surface">@color/black</color>
+    <color name="color_on_error">@color/white</color>
+
+    <integer-array name="swipe_refresh_indicator">
+        <item>@color/color_primary</item>
+        <item>@color/color_primary_variant</item>
+        <item>@color/color_secondary</item>
+        <item>@color/color_secondary_variant</item>
+    </integer-array>
+
+    <!-- Scrim colors -->
+    <color name="system_ui_scrim_light">#B3FFFFFF</color> <!-- 70% white -->
+    <color name="system_ui_scrim_black">#40000000</color> <!-- 25% black -->
+
+    <!-- We use a dark scrim by default since light status is API 23+ -->
+    <color name="status_bar_scrim">@color/system_ui_scrim_black</color>
+    <!-- We use a dark scrim by default since light nav bar is API 27+ -->
+    <color name="nav_bar_scrim">@color/system_ui_scrim_black</color>
+
+    <!-- -->
+    <color name="regular_status_bar_scrim">@color/transparent</color>
+</resources>

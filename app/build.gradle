@@ -1,0 +1,180 @@
+apply plugin: 'com.android.application'
+apply plugin: 'org.jetbrains.kotlin.android'
+apply plugin: 'org.jetbrains.kotlin.kapt'
+apply plugin: 'org.jetbrains.kotlin.android.extensions'
+apply plugin: 'androidx.navigation.safeargs.kotlin'
+
+android {
+    compileSdkVersion versions.buildConfig.compileSdk
+    buildToolsVersion versions.buildConfig.buildTools
+
+    defaultConfig {
+        applicationId "com.steiner.btmmovies.app"
+        minSdkVersion versions.buildConfig.minSdk
+        targetSdkVersion versions.buildConfig.targetSdk
+        versionCode versions.app.code
+        versionName versions.app.name
+        resConfigs "en", "ru", "uk"
+        vectorDrawables.useSupportLibrary = true
+        archivesBaseName = "btmmovies-app"
+
+        testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
+
+        javaCompileOptions {
+            annotationProcessorOptions {
+                arguments += [
+                        "room.schemaLocation"  : "$projectDir/schemas".toString(),
+                        "room.incremental"     : "true",
+                        "room.expandProjection": "true"
+                ]
+            }
+        }
+
+        buildConfigField "String", "TMDB_API_KEY", "\"" + "ec19b1a305414cdc7e4a9246b7047d0c" + "\""
+    }
+
+    sourceSets {
+        androidTest.assets.srcDirs += files("$projectDir/schemas".toString())
+    }
+
+    buildFeatures {
+        viewBinding = true
+    }
+
+    sourceSets {
+        androidTest.assets.srcDirs += files("$projectDir/schemas".toString())
+    }
+
+    buildTypes {
+        release {
+            minifyEnabled false
+            proguardFiles getDefaultProguardFile('proguard-android-optimize.txt'), 'proguard-rules.pro'
+        }
+    }
+
+    packagingOptions {
+        exclude("**/*.kotlin_metadata")
+        exclude("META-INF/*.kotlin_module")
+    }
+}
+
+kapt {
+    correctErrorTypes = true
+    useBuildCache = true
+}
+
+dependencies {
+    implementation fileTree(dir: "libs", include: ["*.jar"])
+
+    implementation deps.kotlin.stdlib.jdk
+    implementation deps.kotlin.stdlib.jdk7
+    implementation deps.kotlin.stdlib.jdk8
+    implementation deps.kotlin.coroutines.jdk
+    implementation deps.kotlin.coroutines.android
+    implementation deps.kotlin.flowExtensions
+
+    implementation deps.androidX.activity.body
+    implementation deps.androidX.activity.bodyKtx
+    implementation deps.androidX.annotation.main
+    implementation deps.androidX.annotation.experimental
+    implementation deps.androidX.appcompat.body
+    implementation deps.androidX.archCore.common
+    implementation deps.androidX.archCore.runtime
+    implementation deps.androidX.cardview
+    implementation deps.androidX.collection.body
+    implementation deps.androidX.collection.bodyKtx
+    implementation deps.androidX.constraintlayout
+    implementation deps.androidX.coordinatorlayout
+    implementation deps.androidX.core.body
+    implementation deps.androidX.core.bodyKtx
+    implementation deps.androidX.fragment.body
+    implementation deps.androidX.fragment.bodyKtx
+    implementation deps.androidX.interpolator
+    implementation deps.androidX.lifecycle.common
+    implementation deps.androidX.lifecycle.commonJava8
+    implementation deps.androidX.lifecycle.liveDataCore
+    implementation deps.androidX.lifecycle.liveDataCoreKtx
+    implementation deps.androidX.lifecycle.liveData
+    implementation deps.androidX.lifecycle.liveDataKtx
+    implementation deps.androidX.lifecycle.process
+    implementation deps.androidX.lifecycle.runtime
+    implementation deps.androidX.lifecycle.runtimeKtx
+    implementation deps.androidX.lifecycle.service
+    implementation deps.androidX.lifecycle.viewModel
+    implementation deps.androidX.lifecycle.viewModelKtx
+    implementation deps.androidX.lifecycle.viewModelSavedState
+    implementation deps.androidX.navigation.ui
+    implementation deps.androidX.navigation.uiKtx
+    implementation deps.androidX.navigation.fragment
+    implementation deps.androidX.navigation.fragmentKtx
+    implementation deps.androidX.paging.common
+    implementation deps.androidX.paging.commonKtx
+    implementation deps.androidX.paging.runtime
+    implementation deps.androidX.paging.runtimeKtx
+    implementation deps.androidX.preference.body
+    implementation deps.androidX.preference.bodyKtx
+    implementation deps.androidX.recyclerview.body
+    kapt deps.androidX.room.compiler
+    implementation deps.androidX.room.common
+    implementation deps.androidX.room.runtime
+    implementation deps.androidX.room.runtimeKtx
+    implementation deps.androidX.room.migration
+    implementation deps.androidX.swiperefreshlayout
+    implementation deps.androidX.transition
+    implementation deps.androidX.vectordrawable.body
+    implementation deps.androidX.vectordrawable.animated
+    implementation deps.androidX.viewpager2
+    implementation deps.androidX.work.runtime
+    implementation deps.androidX.work.runtimeKtx
+    implementation deps.androidX.work.gcm
+
+    implementation deps.material
+
+    implementation deps.insetter.body
+    implementation deps.insetter.ktx
+
+    implementation deps.javaxInject
+    implementation deps.dagger.runtime
+    kapt deps.dagger.compiler
+    implementation deps.dagger.android
+    kapt deps.dagger.androidProcessor
+    implementation deps.dagger.androidSupport
+
+    implementation(deps.glide.client)
+    implementation(deps.glide.okHttp3Integration) {
+        transitive = false
+    }
+    implementation(deps.glide.recyclerViewIntegration) {
+        transitive = false
+    }
+    implementation deps.glide.transformations
+    implementation deps.glide.annotations
+    kapt deps.glide.compiler
+
+    implementation deps.timber
+
+    implementation deps.threeten.bpNoTzdb
+    implementation deps.threeten.lazyBp
+
+    implementation deps.okio.jvm
+
+    implementation deps.okhttp.client
+    implementation deps.okhttp.urlconnection
+    implementation devDeps.okhttp.logging
+
+    implementation deps.moshi.core
+    implementation deps.moshi.adapters
+    kapt deps.moshi.kotlinCodegen // Need for https://github.com/square/moshi#codegen
+
+    implementation deps.retrofit.client
+
+    implementation deps.kotlin.flowBinding.android
+    implementation deps.store.store4
+
+    implementation 'com.facebook.android:facebook-login:6.2.0'
+    implementation 'com.uwetrottmann.tmdb2:tmdb-java:2.2.0'
+
+    testImplementation 'junit:junit:4.13'
+    androidTestImplementation 'androidx.test.ext:junit:1.1.1'
+    androidTestImplementation 'androidx.test.espresso:espresso-core:3.2.0'
+}

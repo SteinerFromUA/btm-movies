@@ -1,0 +1,208 @@
+{
+  "formatVersion": 1,
+  "database": {
+    "version": 1,
+    "identityHash": "c6dc3c61d8e3e4cbf3531f4f491d7017",
+    "entities": [
+      {
+        "tableName": "last_requests",
+        "createSql": "CREATE TABLE IF NOT EXISTS `${TABLE_NAME}` (`request` TEXT NOT NULL, `timestamp` INTEGER NOT NULL, PRIMARY KEY(`request`))",
+        "fields": [
+          {
+            "fieldPath": "request",
+            "columnName": "request",
+            "affinity": "TEXT",
+            "notNull": true
+          },
+          {
+            "fieldPath": "timestamp",
+            "columnName": "timestamp",
+            "affinity": "INTEGER",
+            "notNull": true
+          }
+        ],
+        "primaryKey": {
+          "columnNames": [
+            "request"
+          ],
+          "autoGenerate": false
+        },
+        "indices": [
+          {
+            "name": "index_last_requests_request",
+            "unique": true,
+            "columnNames": [
+              "request"
+            ],
+            "createSql": "CREATE UNIQUE INDEX IF NOT EXISTS `index_last_requests_request` ON `${TABLE_NAME}` (`request`)"
+          }
+        ],
+        "foreignKeys": []
+      },
+      {
+        "tableName": "tmdb_movies",
+        "createSql": "CREATE TABLE IF NOT EXISTS `${TABLE_NAME}` (`tmdb_movie_id` INTEGER NOT NULL, `title` TEXT, `description` TEXT, `poster_url` TEXT, PRIMARY KEY(`tmdb_movie_id`))",
+        "fields": [
+          {
+            "fieldPath": "movieId",
+            "columnName": "tmdb_movie_id",
+            "affinity": "INTEGER",
+            "notNull": true
+          },
+          {
+            "fieldPath": "title",
+            "columnName": "title",
+            "affinity": "TEXT",
+            "notNull": false
+          },
+          {
+            "fieldPath": "description",
+            "columnName": "description",
+            "affinity": "TEXT",
+            "notNull": false
+          },
+          {
+            "fieldPath": "posterUrl",
+            "columnName": "poster_url",
+            "affinity": "TEXT",
+            "notNull": false
+          }
+        ],
+        "primaryKey": {
+          "columnNames": [
+            "tmdb_movie_id"
+          ],
+          "autoGenerate": false
+        },
+        "indices": [
+          {
+            "name": "index_tmdb_movies_tmdb_movie_id",
+            "unique": true,
+            "columnNames": [
+              "tmdb_movie_id"
+            ],
+            "createSql": "CREATE UNIQUE INDEX IF NOT EXISTS `index_tmdb_movies_tmdb_movie_id` ON `${TABLE_NAME}` (`tmdb_movie_id`)"
+          }
+        ],
+        "foreignKeys": []
+      },
+      {
+        "tableName": "ongoing_tmdb_movies",
+        "createSql": "CREATE TABLE IF NOT EXISTS `${TABLE_NAME}` (`id` INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL, `ongoing_movie_id` INTEGER NOT NULL, `page` INTEGER NOT NULL, `page_position` INTEGER NOT NULL, FOREIGN KEY(`ongoing_movie_id`) REFERENCES `tmdb_movies`(`tmdb_movie_id`) ON UPDATE CASCADE ON DELETE CASCADE DEFERRABLE INITIALLY DEFERRED)",
+        "fields": [
+          {
+            "fieldPath": "id",
+            "columnName": "id",
+            "affinity": "INTEGER",
+            "notNull": true
+          },
+          {
+            "fieldPath": "movieId",
+            "columnName": "ongoing_movie_id",
+            "affinity": "INTEGER",
+            "notNull": true
+          },
+          {
+            "fieldPath": "page",
+            "columnName": "page",
+            "affinity": "INTEGER",
+            "notNull": true
+          },
+          {
+            "fieldPath": "pagePosition",
+            "columnName": "page_position",
+            "affinity": "INTEGER",
+            "notNull": true
+          }
+        ],
+        "primaryKey": {
+          "columnNames": [
+            "id"
+          ],
+          "autoGenerate": true
+        },
+        "indices": [
+          {
+            "name": "index_ongoing_tmdb_movies_ongoing_movie_id",
+            "unique": true,
+            "columnNames": [
+              "ongoing_movie_id"
+            ],
+            "createSql": "CREATE UNIQUE INDEX IF NOT EXISTS `index_ongoing_tmdb_movies_ongoing_movie_id` ON `${TABLE_NAME}` (`ongoing_movie_id`)"
+          }
+        ],
+        "foreignKeys": [
+          {
+            "table": "tmdb_movies",
+            "onDelete": "CASCADE",
+            "onUpdate": "CASCADE",
+            "columns": [
+              "ongoing_movie_id"
+            ],
+            "referencedColumns": [
+              "tmdb_movie_id"
+            ]
+          }
+        ]
+      },
+      {
+        "tableName": "favourite_tmdb_movies",
+        "createSql": "CREATE TABLE IF NOT EXISTS `${TABLE_NAME}` (`id` INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL, `favourite_movie_id` INTEGER NOT NULL, `liked_at` INTEGER NOT NULL, FOREIGN KEY(`favourite_movie_id`) REFERENCES `tmdb_movies`(`tmdb_movie_id`) ON UPDATE CASCADE ON DELETE CASCADE DEFERRABLE INITIALLY DEFERRED)",
+        "fields": [
+          {
+            "fieldPath": "id",
+            "columnName": "id",
+            "affinity": "INTEGER",
+            "notNull": true
+          },
+          {
+            "fieldPath": "movieId",
+            "columnName": "favourite_movie_id",
+            "affinity": "INTEGER",
+            "notNull": true
+          },
+          {
+            "fieldPath": "likedAt",
+            "columnName": "liked_at",
+            "affinity": "INTEGER",
+            "notNull": true
+          }
+        ],
+        "primaryKey": {
+          "columnNames": [
+            "id"
+          ],
+          "autoGenerate": true
+        },
+        "indices": [
+          {
+            "name": "index_favourite_tmdb_movies_favourite_movie_id",
+            "unique": true,
+            "columnNames": [
+              "favourite_movie_id"
+            ],
+            "createSql": "CREATE UNIQUE INDEX IF NOT EXISTS `index_favourite_tmdb_movies_favourite_movie_id` ON `${TABLE_NAME}` (`favourite_movie_id`)"
+          }
+        ],
+        "foreignKeys": [
+          {
+            "table": "tmdb_movies",
+            "onDelete": "CASCADE",
+            "onUpdate": "CASCADE",
+            "columns": [
+              "favourite_movie_id"
+            ],
+            "referencedColumns": [
+              "tmdb_movie_id"
+            ]
+          }
+        ]
+      }
+    ],
+    "views": [],
+    "setupQueries": [
+      "CREATE TABLE IF NOT EXISTS room_master_table (id INTEGER PRIMARY KEY,identity_hash TEXT)",
+      "INSERT OR REPLACE INTO room_master_table (id,identity_hash) VALUES(42, 'c6dc3c61d8e3e4cbf3531f4f491d7017')"
+    ]
+  }
+}
