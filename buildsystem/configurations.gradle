@@ -1,0 +1,46 @@
+ext.versions = [
+        'root'       : [
+                kotlin                       : "1.3.71",
+                gradleDist                   : "6.3",
+                androidPlugin                : "4.0.0-beta03",
+                googleServicesPlugin         : "4.3.3",
+                versionsPlugin               : "0.28.0",
+                ktLintPlugin                 : "0.36.0",
+                spotlessPlugin               : "3.28.0",
+                firebaseAppDistributionPlugin: "1.3.1",
+                firebaseCrashlyticsPlugin    : "2.0.0-beta03",
+                ossLicensesPlugin            : "0.10.2",
+        ],
+
+        'buildConfig': [
+                buildTools: "29.0.3",
+                minSdk    : 21,
+                targetSdk : 29,
+                compileSdk: 29,
+        ],
+
+        'app'        : [
+                'major' : 0,
+                'minor' : 0,
+                'patch' : 1,
+                'build' : 0,
+                'suffix': "",
+        ],
+]
+
+// Manifest version information
+ext.versions.app['name'] = "${versions.app.major}.${versions.app.minor}.${versions.app.patch}"
+if (versions.app.build > 0) ext.versions.app['name'] += "-${versions.app.build}"
+if (!(versions.app.suffix as String).isEmpty()) ext.versions.app['name'] += "-${versions.app.suffix}"
+
+ext.versions.app['code'] = versions.app.major * 1000000 + versions.app.minor * 10000 + versions.app.patch * 100 + versions.app.build
+
+ext.endpoints = []
+
+ext.testData = []
+
+ext.otherData = []
+
+ext.signConfig = [
+        'debug': [],
+]
