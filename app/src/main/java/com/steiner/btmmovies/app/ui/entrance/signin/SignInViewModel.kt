@@ -3,9 +3,12 @@ package com.steiner.btmmovies.app.ui.entrance.signin
 import android.app.Application
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.SavedStateHandle
+import com.facebook.AccessToken
 import com.facebook.CallbackManager
 import com.facebook.FacebookCallback
 import com.facebook.FacebookException
+import com.facebook.Profile
+import com.facebook.ProfileTracker
 import com.facebook.login.LoginManager
 import com.facebook.login.LoginResult
 import com.steiner.btmmovies.app.R
@@ -17,6 +20,7 @@ import com.steiner.btmmovies.core.ui.BaseViewModel
 import com.steiner.btmmovies.core.util.CoroutineDispatcherProvider
 import javax.inject.Inject
 import javax.inject.Provider
+
 
 /**
  *
@@ -39,8 +43,8 @@ class SignInViewModel private constructor(
     private val fbCallback = object : FacebookCallback<LoginResult> {
 
         override fun onSuccess(result: LoginResult?) {
-            if (result?.accessToken != null) {
-                _signedInEvent.setAction()
+            if (AccessToken.getCurrentAccessToken() != null) {
+                Profile.fetchProfileForCurrentAccessToken()
             } else {
                 _anyNoticeEvent.setNotice(
                     Notice.Snackbar(messageId = R.string.text_sign_in_error)
@@ -57,6 +61,19 @@ class SignInViewModel private constructor(
         override fun onCancel() = Unit
     }
 
+    private val profileTracker: ProfileTracker = object : ProfileTracker() {
+
+        override fun onCurrentProfileChanged(oldProfile: Profile?, currentProfile: Profile?) {
+            if (currentProfile != null) {
+                _signedInEvent.setAction()
+            } else {
+                _anyNoticeEvent.setNotice(
+                    Notice.Snackbar(messageId = R.string.text_sign_in_error)
+                )
+            }
+        }
+    }
+
     init {
         LoginManager.getInstance().registerCallback(fbCbManager, fbCallback)
     }
@@ -65,6 +82,7 @@ class SignInViewModel private constructor(
         super.onCleared()
 
         LoginManager.getInstance().unregisterCallback(fbCbManager)
+        profileTracker.stopTracking()
     }
 
     class AssistedFactory @Inject internal constructor(

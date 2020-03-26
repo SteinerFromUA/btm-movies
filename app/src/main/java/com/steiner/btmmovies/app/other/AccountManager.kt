@@ -19,8 +19,9 @@ class AccountManager @Inject constructor(
     var accountComponent: AccountSubComponent? = null
         private set
 
-    fun isRegistered() = Profile.getCurrentProfile() != null &&
-            AccessToken.getCurrentAccessToken() != null
+    fun isRegistered() = AccessToken.getCurrentAccessToken() != null &&
+            AccessToken.isCurrentAccessTokenActive() &&
+            Profile.getCurrentProfile() != null
 
     fun login() {
         accountComponent = accountComponentFactory.create(
