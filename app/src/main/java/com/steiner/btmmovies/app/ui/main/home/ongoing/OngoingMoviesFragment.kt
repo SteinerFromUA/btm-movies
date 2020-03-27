@@ -34,9 +34,7 @@ import com.steiner.btmmovies.model.enumeration.FavouriteState
 class OngoingMoviesFragment :
     BaseFragment(R.layout.fragment_ongoing_movies), OngoingMoviesAdapterActionListener {
 
-    private val viewModel: OngoingMoviesViewModel by activityViewModels {
-        viewModelFactoryCreator.create(this, requireActivity().intent.extras)
-    }
+    private val viewModel: OngoingMoviesViewModel by activityViewModels()
     private val ongoingFilmsAdapter: OngoingMoviesAdapter by lazy {
         OngoingMoviesAdapter(this)
     }

@@ -57,6 +57,14 @@ inline fun consume(action: () -> Unit): Boolean {
 }
 
 /**
+ * Implementation of lazy that is not thread safe. Useful when you know what thread you will be
+ * executing on and are not worried about synchronization.
+ */
+inline fun <T> lazyFast(crossinline action: () -> T): Lazy<T> = lazy(LazyThreadSafetyMode.NONE) {
+    action()
+}
+
+/**
  *
  */
 inline val <reified T : ViewGroup> T.inflater

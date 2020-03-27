@@ -31,9 +31,7 @@ import com.steiner.btmmovies.model.block.FavouriteMovieBlock
 class FavouriteMoviesFragment :
     BaseFragment(R.layout.fragment_favourite_movies), FavouriteMoviesAdapterActionListener {
 
-    private val viewModel: FavouriteMoviesViewModel by activityViewModels {
-        viewModelFactoryCreator.create(this, requireActivity().intent.extras)
-    }
+    private val viewModel: FavouriteMoviesViewModel by activityViewModels()
     private val favouriteFilmsAdapter: FavouriteMoviesAdapter by lazy {
         FavouriteMoviesAdapter(this)
     }

@@ -20,9 +20,7 @@ import com.steiner.btmmovies.core.ui.BaseFragment
  */
 class SignInFragment : BaseFragment(R.layout.fragment_sign_in) {
 
-    private val viewModel: SignInViewModel by activityViewModels {
-        viewModelFactoryCreator.create(this, requireActivity().intent.extras)
-    }
+    private val viewModel: SignInViewModel by activityViewModels()
 
     private lateinit var binding: FragmentSignInBinding
     private lateinit var navController: NavController

@@ -9,6 +9,7 @@ import dagger.Binds
 import dagger.MapKey
 import dagger.Module
 import dagger.multibindings.Multibinds
+import timber.log.Timber
 import javax.inject.Inject
 import javax.inject.Provider
 import kotlin.reflect.KClass
@@ -48,19 +49,24 @@ private typealias ViewModelAssistedFactories = MutableMap<Class<out ViewModel>, 
  *
  */
 class ViewModelFactory internal constructor(
-    owner: SavedStateRegistryOwner,
+    private val owner: SavedStateRegistryOwner,
     defaultArgs: Bundle?,
     private val viewModelFactories: ViewModelAssistedFactoryProviders
 ) : AbstractSavedStateViewModelFactory(owner, defaultArgs) {
 
-    override fun <VM : ViewModel?> create(
+    init {
+        Timber.v("Create $this for an owner: $owner, with default args: $defaultArgs")
+    }
+
+    override fun <VM : ViewModel> create(
         key: String,
         modelClass: Class<VM>,
         handle: SavedStateHandle
     ): VM {
+        Timber.v("Create ViewModel of class: ${modelClass.canonicalName}, for an owner: $owner, with Handle keys: ${handle.keys()} via: $this")
         @Suppress("UNCHECKED_CAST")
         return requireNotNull(viewModelFactories[modelClass]) {
-            "Unknown ViewModel class: $modelClass"
+            "Unknown ViewModel class: $modelClass by Owner: $owner"
         }.get().create(handle) as VM
     }
 

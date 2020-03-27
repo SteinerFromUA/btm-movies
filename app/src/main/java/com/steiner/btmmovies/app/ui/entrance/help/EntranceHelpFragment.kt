@@ -17,9 +17,7 @@ import timber.log.Timber
  */
 class EntranceHelpFragment : BaseFragment(R.layout.fragment_placeholder) {
 
-    private val viewModel: EntranceHelpViewModel by viewModels {
-        viewModelFactoryCreator.create(this, arguments)
-    }
+    private val viewModel: EntranceHelpViewModel by viewModels()
 
     private lateinit var binding: FragmentPlaceholderBinding
     private lateinit var navController: NavController

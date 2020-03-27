@@ -32,9 +32,7 @@ class HomeFragment : BaseFragment(R.layout.fragment_home) {
     @Inject
     lateinit var accountManager: AccountManager
 
-    private val viewModel: HomeViewModel by activityViewModels {
-        viewModelFactoryCreator.create(this, requireActivity().intent.extras)
-    }
+    private val viewModel: HomeViewModel by activityViewModels()
 
     private lateinit var binding: FragmentHomeBinding
     private lateinit var navController: NavController

@@ -6,9 +6,7 @@ import com.steiner.btmmovies.app.BtmMoviesApp
 import com.steiner.btmmovies.app.databinding.ActivityEntranceBinding
 import com.steiner.btmmovies.app.di.guest.GuestSubComponent
 import com.steiner.btmmovies.app.ui.main.MainActivity
-import com.steiner.btmmovies.core.ViewModelFactory
 import com.steiner.btmmovies.core.ui.BaseActivity
-import javax.inject.Inject
 
 /**
  *
@@ -16,9 +14,6 @@ import javax.inject.Inject
 class EntranceActivity : BaseActivity() {
 
     lateinit var guestSubComponent: GuestSubComponent
-
-    @Inject
-    lateinit var viewModelFactoryCreator: ViewModelFactory.Creator
 
     private lateinit var binding: ActivityEntranceBinding
 
