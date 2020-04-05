@@ -11,6 +11,7 @@ import androidx.navigation.fragment.findNavController
 import androidx.paging.PagedList
 import androidx.recyclerview.widget.DefaultItemAnimator
 import androidx.recyclerview.widget.LinearLayoutManager
+import androidx.recyclerview.widget.RecyclerView.Adapter.StateRestorationPolicy
 import com.dropbox.android.external.store4.StoreResponse
 import com.steiner.btmmovies.app.R
 import com.steiner.btmmovies.app.databinding.FragmentOngoingMoviesBinding
@@ -36,7 +37,9 @@ class OngoingMoviesFragment :
 
     private val viewModel: OngoingMoviesViewModel by activityViewModels()
     private val ongoingFilmsAdapter: OngoingMoviesAdapter by lazy {
-        OngoingMoviesAdapter(this)
+        OngoingMoviesAdapter(this).apply {
+            stateRestorationPolicy = StateRestorationPolicy.PREVENT_WHEN_EMPTY
+        }
     }
 
     private lateinit var binding: FragmentOngoingMoviesBinding
@@ -74,6 +77,7 @@ class OngoingMoviesFragment :
                     bottom = requireContext().dpToPx(4f)
                 )
             )
+            adapter = ongoingFilmsAdapter
         }
 
         subscribeToViewModel()
@@ -134,9 +138,6 @@ class OngoingMoviesFragment :
     }
 
     private fun showDataValue(value: PagedList<OngoingMovieBlock>) = binding.run {
-        if (rvOngoingFilms.adapter == null) {
-            rvOngoingFilms.adapter = ongoingFilmsAdapter
-        }
         @Suppress("UNCHECKED_CAST")
         ongoingFilmsAdapter.submitList(value as PagedList<Any>?) {
             if (ongoingFilmsAdapter.itemCount > 0) {

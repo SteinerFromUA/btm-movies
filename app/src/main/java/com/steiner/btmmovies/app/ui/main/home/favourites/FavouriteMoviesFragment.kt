@@ -10,6 +10,7 @@ import androidx.navigation.NavController
 import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.DefaultItemAnimator
 import androidx.recyclerview.widget.LinearLayoutManager
+import androidx.recyclerview.widget.RecyclerView.Adapter.StateRestorationPolicy
 import com.dropbox.android.external.store4.StoreResponse
 import com.steiner.btmmovies.app.R
 import com.steiner.btmmovies.app.databinding.FragmentFavouriteMoviesBinding
@@ -33,7 +34,9 @@ class FavouriteMoviesFragment :
 
     private val viewModel: FavouriteMoviesViewModel by activityViewModels()
     private val favouriteFilmsAdapter: FavouriteMoviesAdapter by lazy {
-        FavouriteMoviesAdapter(this)
+        FavouriteMoviesAdapter(this).apply {
+            stateRestorationPolicy = StateRestorationPolicy.PREVENT_WHEN_EMPTY
+        }
     }
 
     private lateinit var binding: FragmentFavouriteMoviesBinding
@@ -72,6 +75,7 @@ class FavouriteMoviesFragment :
                     bottom = requireContext().dpToPx(4f)
                 )
             )
+            adapter = favouriteFilmsAdapter
         }
 
         subscribeToViewModel()
@@ -116,9 +120,6 @@ class FavouriteMoviesFragment :
     }
 
     private fun showDataValue(value: List<FavouriteMovieBlock>) = binding.run {
-        if (rvFavouriteFilms.adapter == null) {
-            rvFavouriteFilms.adapter = favouriteFilmsAdapter
-        }
         favouriteFilmsAdapter.submitList(value) {
             if (favouriteFilmsAdapter.itemCount > 0) {
                 showContent()
