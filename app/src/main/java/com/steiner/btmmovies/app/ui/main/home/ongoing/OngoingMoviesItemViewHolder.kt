@@ -51,7 +51,7 @@ class OngoingMovieCardViewHolder(
 
     private fun setListeners(listener: ActionListener) = binding.run {
         itemView.setOnClickListener {
-            if (RecyclerView.NO_POSITION != adapterPosition) {
+            if (RecyclerView.NO_POSITION != bindingAdapterPosition) {
                 (itemView.tag as? OngoingMovieBlock)?.let { movie ->
                     listener.onMovieClicked(itemView, movie)
                 }
@@ -59,7 +59,7 @@ class OngoingMovieCardViewHolder(
         }
 
         addToFav.setOnClickListener {
-            if (RecyclerView.NO_POSITION != adapterPosition) {
+            if (RecyclerView.NO_POSITION != bindingAdapterPosition) {
                 (itemView.tag as? OngoingMovieBlock)?.let { movie ->
                     listener.onAddToFavClicked(itemView, movie)
                 }
@@ -67,7 +67,7 @@ class OngoingMovieCardViewHolder(
         }
 
         share.setOnClickListener {
-            if (RecyclerView.NO_POSITION != adapterPosition) {
+            if (RecyclerView.NO_POSITION != bindingAdapterPosition) {
                 (itemView.tag as? OngoingMovieBlock)?.let { movie ->
                     listener.onShareClicked(itemView, movie)
                 }

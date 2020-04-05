@@ -66,7 +66,7 @@ class ViewModelFactory internal constructor(
         Timber.v("Create ViewModel of class: ${modelClass.canonicalName}, for an owner: $owner, with Handle keys: ${handle.keys()} via: $this")
         @Suppress("UNCHECKED_CAST")
         return requireNotNull(viewModelFactories[modelClass]) {
-            "Unknown ViewModel class: $modelClass by Owner: $owner"
+            "Unknown ViewModel class: $modelClass for an owner: $owner"
         }.get().create(handle) as VM
     }
 

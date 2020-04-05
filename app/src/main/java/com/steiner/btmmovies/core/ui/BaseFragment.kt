@@ -20,6 +20,7 @@ abstract class BaseFragment @ContentView constructor(
 
     @Inject
     lateinit var viewModelFactoryCreator: ViewModelFactory.Creator
+        protected set
 
     private val viewModelFactory: ViewModelProvider.Factory by lazyFast {
         viewModelFactoryCreator.create(this, arguments ?: Bundle())

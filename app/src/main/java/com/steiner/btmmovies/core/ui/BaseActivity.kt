@@ -11,6 +11,7 @@ abstract class BaseActivity : AppCompatActivity() {
 
     @Inject
     lateinit var viewModelFactoryCreator: ViewModelFactory.Creator
+        protected set
 
     private val viewModelFactory: ViewModelProvider.Factory by lazyFast {
         viewModelFactoryCreator.create(this, intent.extras ?: Bundle())
