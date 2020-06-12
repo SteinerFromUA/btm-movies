@@ -27,10 +27,11 @@
             app:popExitAnim="@anim/slide_out_right" />
     </fragment>
 
-    <fragment android:id="@+id/dest_movie_details"
+    <fragment
+        android:id="@+id/dest_movie_details"
+        android:name="com.steiner.btmmovies.app.ui.main.home.details.MovieDetailsFragment"
         android:label="MovieDetailsFragment"
-        tools:layout="@layout/fragment_placeholder"
-        android:name="com.steiner.btmmovies.app.ui.main.home.details.MovieDetailsFragment">
+        tools:layout="@layout/fragment_placeholder">
         <argument
             android:name="movie_id"
             app:argType="integer" />

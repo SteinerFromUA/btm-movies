@@ -132,7 +132,8 @@ class OngoingMoviesFragment :
             when (dataResponse) {
                 is StoreResponse.Data -> showDataValue(dataResponse.value)
                 is StoreResponse.Loading -> showLoading()
-                is StoreResponse.Error -> showErrorValue(dataResponse.error)
+                is StoreResponse.Error.Exception -> showErrorValue(dataResponse.error)
+                is StoreResponse.Error.Message -> throw UnsupportedOperationException("Unsupported data type: $dataResponse")
             }.exhaustive
         }
     }

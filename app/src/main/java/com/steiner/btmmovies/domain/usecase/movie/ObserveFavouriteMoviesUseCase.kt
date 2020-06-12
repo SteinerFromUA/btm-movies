@@ -31,12 +31,12 @@ class ObserveFavouriteMoviesUseCase @Inject constructor(
     ): Flow<StoreResponse<List<FavouriteMovieBlock>>> {
         return favouriteTmdbMovieDao.takeAllBlocksAsFlow().map { fmcList ->
             @Suppress("USELESS_CAST")
-            StoreResponse.Data(value = fmcList, origin = ResponseOrigin.Persister)
+            StoreResponse.Data(value = fmcList, origin = ResponseOrigin.SourceOfTruth)
                     as StoreResponse<List<FavouriteMovieBlock>>
         }.flowOn(coroutineDispatchers.database).distinctUntilChanged().onStart {
             emit(StoreResponse.Loading(origin = ResponseOrigin.Cache))
         }.catch { throwable ->
-            emit(StoreResponse.Error(origin = ResponseOrigin.Cache, error = throwable))
+            emit(StoreResponse.Error.Exception(origin = ResponseOrigin.Cache, error = throwable))
         }
     }
 }

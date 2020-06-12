@@ -1,22 +1,22 @@
 ext.versions = [
         'root'       : [
-                kotlin                       : "1.3.71",
-                gradleDist                   : "6.3",
-                androidPlugin                : "4.0.0-beta03",
+                kotlin                       : "1.3.72",
+                gradleDist                   : "6.5",
+                androidPlugin                : "4.0.0",
                 googleServicesPlugin         : "4.3.3",
                 versionsPlugin               : "0.28.0",
-                ktLintPlugin                 : "0.36.0",
-                spotlessPlugin               : "3.28.1",
-                firebaseAppDistributionPlugin: "1.3.1",
-                firebaseCrashlyticsPlugin    : "2.0.0-beta03",
+                ktLintPlugin                 : "0.37.1",
+                spotlessPlugin               : "4.3.0",
+                firebaseAppDistributionPlugin: "2.0.0",
+                firebaseCrashlyticsPlugin    : "2.1.1",
                 ossLicensesPlugin            : "0.10.2",
         ],
 
         'buildConfig': [
-                buildTools: "29.0.3",
+                buildTools: "30.0.0",
                 minSdk    : 21,
                 targetSdk : 29,
-                compileSdk: 29,
+                compileSdk: 30,
         ],
 
         'app'        : [

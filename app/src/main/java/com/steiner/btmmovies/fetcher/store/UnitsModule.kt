@@ -3,8 +3,10 @@ package com.steiner.btmmovies.fetcher.store
 import androidx.paging.PagedList
 import androidx.paging.PagedList.Config
 import androidx.room.withTransaction
+import com.dropbox.android.external.store4.SourceOfTruth
 import com.dropbox.android.external.store4.Store
 import com.dropbox.android.external.store4.StoreBuilder
+import com.dropbox.android.external.store4.nonFlowValueFetcher
 import com.steiner.btmmovies.app.di.account.AccountScope
 import com.steiner.btmmovies.core.AccountLifetime
 import com.steiner.btmmovies.core.extension.bodyOrThrow
@@ -72,66 +74,69 @@ internal class UnitsModuleProvides {
         tmdbClient: Tmdb,
         insertionMapper: OngoingResultToOngoingInsertion
     ): OngoingMoviesStore {
-        return StoreBuilder.fromNonFlow<OngoingMoviesKey, List<Pair<TmdbMovie, OngoingTmdbMovie>>> { key ->
-            // TODO: Special delay for test
-            delay(2.seconds)
+        return StoreBuilder.from<OngoingMoviesKey, List<Pair<TmdbMovie, OngoingTmdbMovie>>, PagedList<OngoingMovieBlock>>(
+            fetcher = nonFlowValueFetcher { key ->
+                // FIXME: Special delay for test
+                delay(2.seconds)
 
-            val networkResponse = withContext(coroutineDispatchers.network) {
-                val response = DiscoverMovieBuilder(tmdbClient.discoverService())
-                    .release_date_gte(key.gteReleaseDate)
-                    .release_date_lte(key.lteReleaseDate)
-                    .page(1)
-                    .build()
-                    .executeWithRetry()
+                val networkResponse = withContext(coroutineDispatchers.network) {
+                    val response = DiscoverMovieBuilder(tmdbClient.discoverService())
+                        .release_date_gte(key.gteReleaseDate)
+                        .release_date_lte(key.lteReleaseDate)
+                        .page(1)
+                        .build()
+                        .executeWithRetry()
 
-                tmdbClient.throwOnKnownError(response)
-                response.bodyOrThrow()
-            }
-            withContext(coroutineDispatchers.computation) {
-                insertionMapper.map(networkResponse)
-            }
-        }.persister(
-            reader = { key ->
-                val callback = OngoingMoviesBoundaryCallback(
-                    scope = storeScope,
-                    coroutineDispatchers = coroutineDispatchers,
-                    accountDatabase = accountDatabase,
-                    tmdbMovieDao = tmdbMovieDao,
-                    ongoingTmdbMovieDao = ongoingTmdbMovieDao,
-                    tmdbClient = tmdbClient,
-                    insertionMapper = insertionMapper,
-                    key = key
-                )
-                ongoingTmdbMovieDao.takeAllBlocksAsDsf().toFlow(
-                    config = DEFAULT_DB_PAGED_LIST_CONFIG_BUILDER.build(),
-                    boundaryCallback = callback,
-                    fetchExecutor = coroutineDispatchers.database.asExecutor()
-                )
+                    tmdbClient.throwOnKnownError(response)
+                    response.bodyOrThrow()
+                }
+                withContext(coroutineDispatchers.computation) {
+                    insertionMapper.map(networkResponse)
+                }
             },
-            writer = { key, fromFetcher ->
-                accountDatabase.withTransaction {
-                    ongoingTmdbMovieDao.clearAllSuspend()
-                    tmdbMovieDao.clearExceptFavouritesSuspend()
-                    fromFetcher.forEach { ongoingPair ->
-                        tmdbMovieDao.upsert(ongoingPair.first)
-                        ongoingTmdbMovieDao.insertOrReplaceSuspend(ongoingPair.second)
-                    }
-                    lastRequestDao.insertOrReplaceSuspend(
-                        LastRequest(Request.ONGOING_MOVIES, System.currentTimeMillis())
+            sourceOfTruth = SourceOfTruth.from(
+                reader = { key ->
+                    val callback = OngoingMoviesBoundaryCallback(
+                        scope = storeScope,
+                        coroutineDispatchers = coroutineDispatchers,
+                        accountDatabase = accountDatabase,
+                        tmdbMovieDao = tmdbMovieDao,
+                        ongoingTmdbMovieDao = ongoingTmdbMovieDao,
+                        tmdbClient = tmdbClient,
+                        insertionMapper = insertionMapper,
+                        key = key
                     )
+                    ongoingTmdbMovieDao.takeAllBlocksAsDsf().toFlow(
+                        config = DEFAULT_DB_PAGED_LIST_CONFIG_BUILDER.build(),
+                        boundaryCallback = callback,
+                        fetchExecutor = coroutineDispatchers.database.asExecutor()
+                    )
+                },
+                writer = { key, fromFetcher ->
+                    accountDatabase.withTransaction {
+                        ongoingTmdbMovieDao.clearAllSuspend()
+                        tmdbMovieDao.clearExceptFavouritesSuspend()
+                        fromFetcher.forEach { ongoingPair ->
+                            tmdbMovieDao.upsert(ongoingPair.first)
+                            ongoingTmdbMovieDao.insertOrReplaceSuspend(ongoingPair.second)
+                        }
+                        lastRequestDao.insertOrReplaceSuspend(
+                            LastRequest(Request.ONGOING_MOVIES, System.currentTimeMillis())
+                        )
+                    }
+                    Timber.v("Page 1 of ongoing movies with key $key loaded")
+                },
+                delete = { key ->
+                    throw UnsupportedOperationException("This Store don't support this operation!")
+                },
+                deleteAll = {
+                    accountDatabase.withTransaction {
+                        ongoingTmdbMovieDao.clearAllSuspend()
+                        tmdbMovieDao.clearExceptFavouritesSuspend()
+                    }
+                    Timber.v("Ongoing movies cleared")
                 }
-                Timber.v("Page 1 of ongoing movies with key $key loaded")
-            },
-            delete = { key ->
-                throw UnsupportedOperationException("This Store don't support this operation!")
-            },
-            deleteAll = {
-                accountDatabase.withTransaction {
-                    ongoingTmdbMovieDao.clearAllSuspend()
-                    tmdbMovieDao.clearExceptFavouritesSuspend()
-                }
-                Timber.v("Ongoing movies cleared")
-            }
+            )
         ).disableCache().scope(storeScope).build()
     }
 

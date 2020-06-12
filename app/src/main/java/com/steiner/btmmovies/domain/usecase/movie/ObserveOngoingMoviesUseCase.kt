@@ -58,7 +58,7 @@ class ObserveOngoingMoviesUseCase @Inject constructor(
                     StoreRequest.skipMemory(key = storeKey, refresh = true)
                 }
             ).transform { omsResponse ->
-                if (omsResponse.origin != ResponseOrigin.Persister ||
+                if (omsResponse.origin != ResponseOrigin.SourceOfTruth ||
                     omsResponse !is StoreResponse.Data ||
                     !shouldSkipFirstFromLocal.compareAndSet(true, false)
                 ) emit(omsResponse)
@@ -66,7 +66,7 @@ class ObserveOngoingMoviesUseCase @Inject constructor(
         }.onStart {
             emit(StoreResponse.Loading(origin = ResponseOrigin.Cache))
         }.catch { throwable ->
-            emit(StoreResponse.Error(origin = ResponseOrigin.Cache, error = throwable))
+            emit(StoreResponse.Error.Exception(origin = ResponseOrigin.Cache, error = throwable))
         }
     }
 }

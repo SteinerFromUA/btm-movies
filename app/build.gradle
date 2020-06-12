@@ -133,7 +133,6 @@ dependencies {
     implementation deps.insetter.body
     implementation deps.insetter.ktx
 
-    implementation deps.javaxInject
     implementation deps.dagger.runtime
     kapt deps.dagger.compiler
     implementation deps.dagger.android
@@ -171,7 +170,7 @@ dependencies {
     implementation deps.kotlin.flowBinding.android
     implementation deps.store.store4
 
-    implementation 'com.facebook.android:facebook-login:6.2.0'
+    implementation 'com.facebook.android:facebook-login:7.0.1'
     implementation 'com.uwetrottmann.tmdb2:tmdb-java:2.2.0'
 
     testImplementation 'junit:junit:4.13'
